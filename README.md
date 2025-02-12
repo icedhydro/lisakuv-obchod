@@ -7,7 +7,6 @@ Tento projekt je jednoduché **REST API** pro evidenci produktů v obchodě. Umo
 ## **📌 Požadavky**
 
 -   **Docker + Docker Compose**
--   **Nebo alternativně:**
     -   **Laravel v11.42.0**
     -   **PHP v8.3.14**
     -   **Composer**
@@ -17,18 +16,18 @@ Tento projekt je jednoduché **REST API** pro evidenci produktů v obchodě. Umo
 
 ## **🚀 Instalace a spuštění**
 
-### **🔹 1️⃣ Automatické spuštění přes Docker**
+### **🔹 1️⃣ Spuštění přes Docker**
 
 Nejrychlejší způsob, jak spustit projekt.
 
 ```bash
 git clone https://github.com/icedhydro/lisakuv-obchod.git
 cd lisakuv-obchod
-docker-compose up -d
+docker-compose up --build
 ```
 
-📌 **Po spuštění bude API dostupné na:**  
-[http://127.0.0.1:8000](http://127.0.0.1:8000)
+📌 **Po spuštění bude OpenAPI dokumentace dostupná na:**  
+[http://0.0.0.0:8000/api/documentation/](http://0.0.0.0:8000/api/documentation/)
 
 Pokud chceš aplikaci vypnout:
 
@@ -38,7 +37,7 @@ docker-compose down
 
 ---
 
-### **🔹 2️⃣ Manuální spuštění bez Dockeru**
+### **🔹 2️⃣ Spuštění bez Dockeru**
 
 Pokud chceš spustit projekt ručně bez Dockeru.
 

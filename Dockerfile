@@ -12,10 +12,13 @@ WORKDIR /app
 # Kopírování souborů do kontejneru
 COPY . .
 
-# Nastavení práv pro úložiště a cache
+# Instalace Laravel závislostí
+RUN composer install --no-interaction --prefer-dist
+
+# Nastavení práv pro storage a cache
 RUN chmod -R 777 storage bootstrap/cache
 
-# Nastavení správných oprávnění pro entrypoint.sh
+# Nastavení správných oprávnění pro entrypoint
 RUN chmod +x /app/entrypoint.sh
 
 # Definice entrypointu
