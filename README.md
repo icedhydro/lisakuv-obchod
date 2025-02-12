@@ -1,57 +1,86 @@
 # 🦊 Lišákův obchod API
 
-Tento projekt je jednoduché REST API pro evidenci produktů v obchodě. API umožňuje spravovat produkty, sledovat historii cen, vyhledávat a filtrovat produkty.
-
-## 📌 Požadavky
-
--   **Laravel v11.42.0**
--   **PHP v8.3.14**
--   **Composer**
--   **SQLite**
+Tento projekt je jednoduché **REST API** pro evidenci produktů v obchodě. Umožňuje správu produktů, sledování historie cen, vyhledávání a filtrování.
 
 ---
 
-## 🚀 Instalace a spuštění
+## **📌 Požadavky**
 
-### 1. Naklonování repozitáře
+-   **Docker + Docker Compose**
+-   **Nebo alternativně:**
+    -   **Laravel v11.42.0**
+    -   **PHP v8.3.14**
+    -   **Composer**
+    -   **SQLite**
+
+---
+
+## **🚀 Instalace a spuštění**
+
+### **🔹 1️⃣ Automatické spuštění přes Docker**
+
+Nejrychlejší způsob, jak spustit projekt.
+
+```bash
+git clone https://github.com/icedhydro/lisakuv-obchod.git
+cd lisakuv-obchod
+docker-compose up -d
+```
+
+📌 **Po spuštění bude API dostupné na:**  
+[http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+Pokud chceš aplikaci vypnout:
+
+```bash
+docker-compose down
+```
+
+---
+
+### **🔹 2️⃣ Manuální spuštění bez Dockeru**
+
+Pokud chceš spustit projekt ručně bez Dockeru.
+
+#### **1. Naklonování repozitáře**
 
 ```bash
 git clone https://github.com/icedhydro/lisakuv-obchod.git
 cd lisakuv-obchod
 ```
 
-### 2. Instalace závislostí
+#### **2. Instalace závislostí**
 
 ```bash
 composer install
 ```
 
-### 3. Nastavení `.env` souboru a vygenerování klíče aplikace
+#### **3. Nastavení `.env` souboru a vygenerování klíče**
 
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-### 4. Nastavení databáze na SQLite:
+#### **4. Nastavení databáze SQLite**
 
 ```ini
 DB_CONNECTION=sqlite
 ```
 
-### 5. Vytvoření databázového souboru:
+#### **5. Vytvoření databázového souboru**
 
 ```bash
 touch database/database.sqlite
 ```
 
-### 6. Spuštění migrací a seedování testovacích dat
+#### **6. Spuštění migrací a seedování**
 
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-### 7. Spuštění aplikace
+#### **7. Spuštění aplikace**
 
 ```bash
 php artisan serve
@@ -59,7 +88,7 @@ php artisan serve
 
 ---
 
-## 📖 Dokumentace API (Swagger UI)
+## **📚 Dokumentace API (Swagger UI)**
 
 Swagger dokumentaci vygeneruješ a zobrazíš takto:
 
@@ -67,11 +96,12 @@ Swagger dokumentaci vygeneruješ a zobrazíš takto:
 php artisan l5-swagger:generate
 ```
 
-📌 Přístup k dokumentaci: [http://127.0.0.1:8000/api/documentation](http://127.0.0.1:8000/api/documentation)
+📌 Přístup k dokumentaci:  
+[http://127.0.0.1:8000/api/documentation](http://127.0.0.1:8000/api/documentation)
 
 ---
 
-## 🔥 Testování API pomocí cURL
+## **🔥 Testování API pomocí cURL**
 
 ### 🔹 Seznam všech produktů
 
@@ -115,7 +145,7 @@ curl -X GET "http://127.0.0.1:8000/api/products/filter?stock_min=10&stock_max=10
 
 ---
 
-## ✅ PHPUnit Testy
+## **✅ PHPUnit Testy**
 
 Pro spuštění testů:
 
@@ -125,16 +155,17 @@ php artisan test --filter ProductApiTest
 
 ---
 
-## 📌 Technologie
+## **📌 Technologie**
 
 -   **Laravel v11.42.0**
 -   **PHP v8.3.14**
 -   **SQLite**
 -   **Swagger - OpenAPI**
 -   **PHPUnit**
+-   **Docker + Docker Compose**
 
 ---
 
-## 📌 Poznámka
+## **📌 Poznámka**
 
-Tento projekt byl vytvořen podle technického zadání Foxentry s cílem ukázat mé schopnosti v PHP vývoji.
+Tento projekt byl vytvořen podle technického zadání **Foxentry** s cílem ukázat mé schopnosti v PHP vývoji.
