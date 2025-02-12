@@ -10,4 +10,9 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'price', 'stock'];
+
+    public function priceHistory()
+    {
+        return $this->hasMany(PriceHistory::class);
+    }
 }
