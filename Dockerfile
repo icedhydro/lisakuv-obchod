@@ -12,9 +12,6 @@ WORKDIR /app
 # Kopírování souborů do kontejneru
 COPY . .
 
-# Instalace závislostí
-RUN composer install
-
 # Nastavení práv pro úložiště a cache
 RUN chmod -R 777 storage bootstrap/cache
 

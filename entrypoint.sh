@@ -9,6 +9,9 @@ fi
 # Generování klíče aplikace
 php artisan key:generate
 
+# Instalace Composer balíčků
+composer install --no-interaction --prefer-dist
+
 # Kontrola, zda existuje databázový soubor, pokud ne, vytvoří
 if [ ! -f database/database.sqlite ]; then
     touch database/database.sqlite
