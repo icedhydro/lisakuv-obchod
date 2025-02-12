@@ -11,15 +11,33 @@ class ProductFactory extends Factory
 
     public function definition()
     {
-        $fruits = ['Jablko', 'Hruška', 'Banán', 'Pomeranč', 'Jahoda', 'Meloun', 'Švestka', 'Meruňka', 'Višeň', 'Hrozny'];
-        $nuts = ['Vlašský ořech', 'Lískový ořech', 'Mandle', 'Kešu', 'Pekanový ořech', 'Para ořech'];
-        $vegetables = ['Mrkev', 'Okurka', 'Rajče', 'Paprika', 'Brambory', 'Cibule', 'Česnek', 'Dýně'];
-
-        $products = array_merge($fruits, $nuts, $vegetables);
-        shuffle($products);
-
         return [
-            'name' => array_pop($products),
+            'name' => $this->faker->unique()->randomElement([
+                'Jablko',
+                'Hruška',
+                'Banán',
+                'Pomeranč',
+                'Jahoda',
+                'Meloun',
+                'Švestka',
+                'Meruňka',
+                'Višeň',
+                'Hrozny',
+                'Vlašský ořech',
+                'Lískový ořech',
+                'Mandle',
+                'Kešu',
+                'Pekanový ořech',
+                'Para ořech',
+                'Mrkev',
+                'Okurka',
+                'Rajče',
+                'Paprika',
+                'Brambory',
+                'Cibule',
+                'Česnek',
+                'Dýně'
+            ]),
             'price' => $this->faker->randomFloat(2, 5, 100),
             'stock' => $this->faker->numberBetween(10, 200),
         ];
