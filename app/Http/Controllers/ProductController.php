@@ -70,4 +70,12 @@ class ProductController extends Controller
         $product->delete();
         return response()->json(['message' => 'Product deleted']);
     }
+
+    /**
+     * Get a product's price history
+     */
+    public function priceHistory(Product $product)
+    {
+        return $product->priceHistory()->orderBy('changed_at', 'desc')->get();
+    }
 }
