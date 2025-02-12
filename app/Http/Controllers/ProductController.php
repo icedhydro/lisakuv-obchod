@@ -90,4 +90,27 @@ class ProductController extends Controller
 
         return Product::where('name', 'like', "%{$request->name}%")->get();
     }
+
+    /**
+     * Filtering products according to the number of pieces in stock
+     */
+    public function filter(Request $request)
+    {
+        $request->validate([
+            'stock_min' => 'nullable|integer',
+            'stock_max' => 'nullable|integer',
+        ]);
+
+        $query = Product::query();
+
+        if ($request->has('stock_min')) {
+            $query->where('stock', '>=', $request->stock_min);
+        }
+
+        if ($request->has('stock_max')) {
+            $query->where('stock', '<=', $request->stock_max);
+        }
+
+        return $query->get();
+    }
 }
