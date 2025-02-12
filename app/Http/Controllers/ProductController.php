@@ -13,7 +13,7 @@ use OpenApi\Annotations as OA;
  *      title="Lišákův obchod API",
  *      description="Dokumentace k API pro evidenci produktů",
  *      @OA\Contact(
- *          email="support@lisakuvobchod.com"
+ *          email="michal.bednarik@pm.me"
  *      ),
  * )
  *
@@ -54,10 +54,8 @@ class ProductController extends Controller
      *             @OA\Property(property="stock", type="integer", example=100)
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Produkt byl úspěšně vytvořen",
-     *     )
+     *     @OA\Response(response=201, description="Produkt byl úspěšně vytvořen"),
+     *     @OA\Response(response=422, description="Nevalidní vstup")
      * )
      */
     public function store(Request $request)
@@ -69,8 +67,13 @@ class ProductController extends Controller
         ]);
 
         $product = Product::create($validated);
-        return response()->json($product, 201);
+
+        return response()->json([
+            'message' => 'Produkt byl úspěšně vytvořen',
+            'data' => $product
+        ], 201);
     }
+
 
     /**
      * @OA\Get(
@@ -83,10 +86,8 @@ class ProductController extends Controller
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Detail produktu"
-     *     )
+     *     @OA\Response(response=200, description="Detail produktu"),
+     *     @OA\Response(response=404, description="Produkt nenalezen")
      * )
      */
     public function show(Product $product)
@@ -94,11 +95,19 @@ class ProductController extends Controller
         return response()->json($product, 200);
     }
 
+
     /**
      * @OA\Put(
      *     path="/products/{id}",
      *     summary="Aktualizace produktu",
      *     tags={"Produkty"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID produktu, který se má aktualizovat",
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -106,10 +115,9 @@ class ProductController extends Controller
      *             @OA\Property(property="stock", type="integer", example=90)
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Produkt byl aktualizován"
-     *     )
+     *     @OA\Response(response=200, description="Produkt byl aktualizován"),
+     *     @OA\Response(response=404, description="Produkt nenalezen"),
+     *     @OA\Response(response=422, description="Nevalidní vstup")
      * )
      */
     public function update(Request $request, Product $product)
@@ -137,10 +145,15 @@ class ProductController extends Controller
      *     path="/products/{id}",
      *     summary="Smazání produktu",
      *     tags={"Produkty"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Produkt byl smazán"
-     *     )
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID produktu, který se má smazat",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Produkt byl smazán"),
+     *     @OA\Response(response=404, description="Produkt nenalezen")
      * )
      */
     public function destroy(Product $product)
@@ -158,12 +171,11 @@ class ProductController extends Controller
      *         name="id",
      *         in="path",
      *         required=true,
+     *         description="ID produktu, jehož historii cen chceme získat",
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Historie cen produktu"
-     *     )
+     *     @OA\Response(response=200, description="Historie cen produktu"),
+     *     @OA\Response(response=404, description="Produkt nenalezen")
      * )
      */
     public function priceHistory(Product $product)
@@ -183,10 +195,8 @@ class ProductController extends Controller
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Seznam nalezených produktů"
-     *     )
+     *     @OA\Response(response=200, description="Seznam nalezených produktů"),
+     *     @OA\Response(response=422, description="Nevalidní vstup")
      * )
      */
     public function search(Request $request)
@@ -215,10 +225,8 @@ class ProductController extends Controller
      *         required=false,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Seznam produktů odpovídající filtraci"
-     *     )
+     *     @OA\Response(response=200, description="Seznam produktů odpovídající filtraci"),
+     *     @OA\Response(response=422, description="Nevalidní vstup")
      * )
      */
     public function filter(Request $request)
