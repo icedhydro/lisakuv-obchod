@@ -5,82 +5,189 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\PriceHistory;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="Lišákův obchod API",
+ *      description="Dokumentace k API pro evidenci produktů",
+ *      @OA\Contact(
+ *          email="support@lisakuvobchod.com"
+ *      ),
+ * )
+ *
+ * @OA\Server(
+ *      url="http://127.0.0.1:8000/api",
+ *      description="Lokální server"
+ * )
+ */
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/products",
+     *     summary="Získání seznamu produktů",
+     *     tags={"Produkty"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Seznam všech produktů",
+     *     )
+     * )
      */
     public function index()
     {
-        return Product::all();
+        return response()->json(Product::all(), 200);
     }
 
     /**
-     * Store a newly created product.
+     * @OA\Post(
+     *     path="/products",
+     *     summary="Vytvoření nového produktu",
+     *     tags={"Produkty"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","price","stock"},
+     *             @OA\Property(property="name", type="string", example="Jablko"),
+     *             @OA\Property(property="price", type="number", format="float", example=25.50),
+     *             @OA\Property(property="stock", type="integer", example=100)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Produkt byl úspěšně vytvořen",
+     *     )
+     * )
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|unique:products',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
         ]);
 
-        return Product::create($request->all());
+        $product = Product::create($validated);
+        return response()->json($product, 201);
     }
 
     /**
-     * Get the detail of a particular product
+     * @OA\Get(
+     *     path="/products/{id}",
+     *     summary="Získání detailu produktu",
+     *     tags={"Produkty"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Detail produktu"
+     *     )
+     * )
      */
     public function show(Product $product)
     {
-        return $product;
+        return response()->json($product, 200);
     }
 
     /**
-     * Update product (including price change tracking)
+     * @OA\Put(
+     *     path="/products/{id}",
+     *     summary="Aktualizace produktu",
+     *     tags={"Produkty"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="price", type="number", format="float", example=30.00),
+     *             @OA\Property(property="stock", type="integer", example=90)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Produkt byl aktualizován"
+     *     )
+     * )
      */
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'price' => 'numeric',
-            'stock' => 'integer',
+        $validated = $request->validate([
+            'price' => 'numeric|min:0',
+            'stock' => 'integer|min:0',
         ]);
 
-        // If the price changes, we save it to history
-        if ($request->has('price') && $product->price != $request->price) {
+        if (isset($validated['price']) && $product->price != $validated['price']) {
             PriceHistory::create([
                 'product_id' => $product->id,
                 'old_price' => $product->price,
-                'new_price' => $request->price,
+                'new_price' => $validated['price'],
                 'changed_at' => now(),
             ]);
         }
 
-        $product->update($request->all());
-        return $product;
+        $product->update($validated);
+        return response()->json($product, 200);
     }
 
     /**
-     * Remove product.
+     * @OA\Delete(
+     *     path="/products/{id}",
+     *     summary="Smazání produktu",
+     *     tags={"Produkty"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Produkt byl smazán"
+     *     )
+     * )
      */
     public function destroy(Product $product)
     {
         $product->delete();
-        return response()->json(['message' => 'Product deleted']);
+        return response()->json(['message' => 'Produkt byl smazán'], 200);
     }
 
     /**
-     * Get a product's price history
+     * @OA\Get(
+     *     path="/products/{id}/price-history",
+     *     summary="Získání historie cen produktu",
+     *     tags={"Produkty"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Historie cen produktu"
+     *     )
+     * )
      */
     public function priceHistory(Product $product)
     {
-        return $product->priceHistory()->orderBy('changed_at', 'desc')->get();
+        return response()->json($product->priceHistory()->orderBy('changed_at', 'desc')->get(), 200);
     }
 
+
     /**
-     * Product search by name
+     * @OA\Get(
+     *     path="/products/search",
+     *     summary="Vyhledání produktu podle názvu",
+     *     tags={"Produkty"},
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Seznam nalezených produktů"
+     *     )
+     * )
      */
     public function search(Request $request)
     {
@@ -88,11 +195,31 @@ class ProductController extends Controller
             'name' => 'required|string'
         ]);
 
-        return Product::where('name', 'like', "%{$request->name}%")->get();
+        return response()->json(Product::where('name', 'like', "%{$request->name}%")->get(), 200);
     }
 
     /**
-     * Filtering products according to the number of pieces in stock
+     * @OA\Get(
+     *     path="/products/filter",
+     *     summary="Filtrování produktů podle počtu kusů na skladě",
+     *     tags={"Produkty"},
+     *     @OA\Parameter(
+     *         name="stock_min",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="stock_max",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Seznam produktů odpovídající filtraci"
+     *     )
+     * )
      */
     public function filter(Request $request)
     {
@@ -111,6 +238,6 @@ class ProductController extends Controller
             $query->where('stock', '<=', $request->stock_max);
         }
 
-        return $query->get();
+        return response()->json($query->get(), 200);
     }
 }
