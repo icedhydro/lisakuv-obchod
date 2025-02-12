@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('price_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->decimal('old_price', 10, 2);
-            $table->decimal('new_price', 10, 2);
+            $table->float('old_price', 10, 2);
+            $table->float('new_price', 10, 2);
             $table->timestamp('changed_at')->useCurrent();
             $table->timestamps();
         });

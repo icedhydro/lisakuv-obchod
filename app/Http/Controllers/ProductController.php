@@ -40,6 +40,7 @@ class ProductController extends Controller
         return response()->json(Product::all(), 200);
     }
 
+
     /**
      * @OA\Post(
      *     path="/products",
@@ -65,6 +66,8 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
         ]);
+
+        $validated['price'] = number_format($validated['price'], 2, '.', '');
 
         $product = Product::create($validated);
 
@@ -111,7 +114,7 @@ class ProductController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="price", type="number", format="float", example=30.00),
+     *             @OA\Property(property="price", type="number", format="float", example="30.99"),
      *             @OA\Property(property="stock", type="integer", example=90)
      *         )
      *     ),
@@ -127,18 +130,26 @@ class ProductController extends Controller
             'stock' => 'integer|min:0',
         ]);
 
-        if (isset($validated['price']) && $product->price != $validated['price']) {
+        $newPrice = number_format($validated['price'], 2, '.', '');
+
+        // If the price has changed, save the new price to the history
+        if ($product->price != $newPrice) {
             PriceHistory::create([
                 'product_id' => $product->id,
                 'old_price' => $product->price,
-                'new_price' => $validated['price'],
+                'new_price' => $newPrice,
                 'changed_at' => now(),
             ]);
         }
 
-        $product->update($validated);
+        $product->update([
+            'price' => $newPrice,
+            'stock' => $validated['stock'],
+        ]);
+
         return response()->json($product, 200);
     }
+
 
     /**
      * @OA\Delete(
@@ -162,6 +173,7 @@ class ProductController extends Controller
         return response()->json(['message' => 'Produkt byl smazán'], 200);
     }
 
+
     /**
      * @OA\Get(
      *     path="/products/{id}/price-history",
@@ -180,7 +192,24 @@ class ProductController extends Controller
      */
     public function priceHistory(Product $product)
     {
-        return response()->json($product->priceHistory()->orderBy('changed_at', 'desc')->get(), 200);
+        $history = $product->priceHistory()
+            ->orderBy('changed_at', 'desc')
+            ->get(['old_price', 'new_price', 'changed_at']);
+
+        return response()->json([
+            'product' => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'current_price' => $product->price,
+            ],
+            'history' => $history->map(function ($entry) {
+                return [
+                    'old_price' => $entry->old_price,
+                    'new_price' => $entry->new_price,
+                    'changed_at' => date('Y-m-d H:i:s', strtotime($entry->changed_at))
+                ];
+            }),
+        ], 200);
     }
 
 
