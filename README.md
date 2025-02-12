@@ -66,13 +66,13 @@ php artisan l5-swagger:generate
 
 ## 🔥 Testování API pomocí cURL
 
-### 📌 1️⃣ Seznam všech produktů
+### 🔹 Seznam všech produktů
 
 ```bash
 curl -X GET "http://127.0.0.1:8000/api/products"
 ```
 
-### 📌 2️⃣ Vytvoření nového produktu
+### 🔹 Vytvoření nového produktu
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/api/products" \
@@ -80,7 +80,7 @@ curl -X POST "http://127.0.0.1:8000/api/products" \
      -d '{"name": "Jablko", "price": 20.5, "stock": 50}'
 ```
 
-### 📌 3️⃣ Aktualizace produktu
+### 🔹 Aktualizace produktu
 
 ```bash
 curl -X PUT "http://127.0.0.1:8000/api/products/1" \
@@ -88,19 +88,19 @@ curl -X PUT "http://127.0.0.1:8000/api/products/1" \
      -d '{"price": 25.0, "stock": 40}'
 ```
 
-### 📌 4️⃣ Smazání produktu
+### 🔹 Smazání produktu
 
 ```bash
 curl -X DELETE "http://127.0.0.1:8000/api/products/1"
 ```
 
-### 📌 5️⃣ Vyhledání produktu podle názvu
+### 🔹 Vyhledání produktu podle názvu
 
 ```bash
 curl -X GET "http://127.0.0.1:8000/api/products/search?name=Hruška"
 ```
 
-### 📌 6️⃣ Filtrování podle počtu kusů na skladu
+### 🔹 Filtrování podle počtu kusů na skladu
 
 ```bash
 curl -X GET "http://127.0.0.1:8000/api/products/filter?stock_min=10&stock_max=100"
@@ -123,7 +123,7 @@ php artisan test --filter ProductApiTest
 -   **Laravel v11.42.0**
 -   **PHP v8.3.14**
 -   **SQLite**
--   **Swagger**
+-   **Swagger - OpenAPI**
 -   **PHPUnit**
 
 ---
