@@ -20,13 +20,13 @@ git clone https://github.com/icedhydro/lisakuv-obchod.git
 cd lisakuv-obchod
 ```
 
-### 2️. Instalace závislostí
+### 2. Instalace závislostí
 
 ```bash
 composer install
 ```
 
-### 3️. Nastavení `.env` souboru a vygenerování klíče aplikace
+### 3. Nastavení `.env` souboru a vygenerování klíče aplikace
 
 ```bash
 cp .env.example .env
@@ -45,13 +45,13 @@ DB_CONNECTION=sqlite
 touch database/database.sqlite
 ```
 
-### 4️⃣ Spuštění migrací a seedování testovacích dat
+### 6. Spuštění migrací a seedování testovacích dat
 
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-### 5️⃣ Spuštění aplikace
+### 7. Spuštění aplikace
 
 ```bash
 php artisan serve
