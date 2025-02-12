@@ -78,4 +78,16 @@ class ProductController extends Controller
     {
         return $product->priceHistory()->orderBy('changed_at', 'desc')->get();
     }
+
+    /**
+     * Product search by name
+     */
+    public function search(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        return Product::where('name', 'like', "%{$request->name}%")->get();
+    }
 }
