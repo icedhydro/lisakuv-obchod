@@ -16,9 +16,10 @@ class ProductFactory extends Factory
         $vegetables = ['Mrkev', 'Okurka', 'Rajče', 'Paprika', 'Brambory', 'Cibule', 'Česnek', 'Dýně'];
 
         $products = array_merge($fruits, $nuts, $vegetables);
+        shuffle($products);
 
         return [
-            'name' => $this->faker->randomElement($products),
+            'name' => array_pop($products),
             'price' => $this->faker->randomFloat(2, 5, 100),
             'stock' => $this->faker->numberBetween(10, 200),
         ];
