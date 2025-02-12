@@ -16,7 +16,7 @@ Tento projekt je jednoduché **REST API** pro evidenci produktů v obchodě. Umo
 
 ## **🚀 Instalace a spuštění**
 
-### **🔹 1️⃣ Spuštění přes Docker**
+### **🔹 Spuštění přes Docker**
 
 Nejrychlejší způsob, jak spustit projekt.
 
@@ -37,7 +37,7 @@ docker-compose down
 
 ---
 
-### **🔹 2️⃣ Spuštění bez Dockeru**
+### **🔹 Spuštění bez Dockeru**
 
 Pokud chceš spustit projekt ručně bez Dockeru.
 
