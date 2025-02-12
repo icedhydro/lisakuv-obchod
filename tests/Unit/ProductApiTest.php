@@ -24,9 +24,12 @@ class ProductApiTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJson([
-                'name' => 'Jablko',
-                'price' => 25.50,
-                'stock' => 100,
+                'message' => 'Produkt byl úspěšně vytvořen',
+                'data' => [
+                    'name' => 'Jablko',
+                    'price' => 25.50,
+                    'stock' => 100,
+                ]
             ]);
 
         $this->assertDatabaseHas('products', ['name' => 'Jablko']);
