@@ -13,29 +13,36 @@ Tento projekt je jednoduché REST API pro evidenci produktů v obchodě. API umo
 
 ## 🚀 Instalace a spuštění
 
-### 1️⃣ Naklonování repozitáře
+### 1. Naklonování repozitáře
 
 ```bash
-git clone https://github.com/tvoje-repozitare/lisakuv-obchod.git
+git clone https://github.com/icedhydro/lisakuv-obchod.git
 cd lisakuv-obchod
 ```
 
-### 2️⃣ Instalace závislostí
+### 2️. Instalace závislostí
 
 ```bash
 composer install
 ```
 
-### 3️⃣ Nastavení `.env` souboru
+### 3️. Nastavení `.env` souboru a vygenerování klíče aplikace
 
 ```bash
 cp .env.example .env
+php artisan key:generate
 ```
 
-Nastavení databáze na SQLite:
+### 4. Nastavení databáze na SQLite:
 
 ```ini
 DB_CONNECTION=sqlite
+```
+
+### 5. Vytvoření databázového souboru:
+
+```bash
+touch database/database.sqlite
 ```
 
 ### 4️⃣ Spuštění migrací a seedování testovacích dat
